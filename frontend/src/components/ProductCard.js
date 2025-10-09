@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-8 flex items-center gap-6" onClick={handleClick}>
             <div className="w-64 bg-darkGrey rounded-xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:shadow-custom transition-transform hover:scale-105">
                 <img
-                    src={`/assets/${product.image}`}
+                    src={`${process.env.PUBLIC_URL}/assets/${product.image}`}
                     alt={product.name}
                     className="w-64 h-64 rounded-t-xl object-cover"
                 />
