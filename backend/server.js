@@ -24,13 +24,13 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // routes
-app.use("/api/auth", authRoutes);
-app.use("/api/plans", planRoutes);
-app.use("/api/card-design", cardDesignRoutes);
-app.use("/api/cards", cardRoutes);
-app.use("/api/card-templates", cardTemplateRoutes);
-app.use("/api/profiles", profileRoutes);
-app.use("/api/user-plans", userPlanRoutes);
+app.use("/anurcards/api/auth", authRoutes);
+app.use("/anurcards/api/plans", planRoutes);
+app.use("/anurcards/api/card-design", cardDesignRoutes);
+app.use("/anurcards/api/cards", cardRoutes);
+app.use("/anurcards/api/card-templates", cardTemplateRoutes);
+app.use("/anurcards/api/profiles", profileRoutes);
+app.use("/anurcards/api/user-plans", userPlanRoutes);
 
 // error handler (last)
 app.use(errorHandler);
