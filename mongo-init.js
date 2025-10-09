@@ -3,14 +3,14 @@ db = db.getSiblingDB('dvc');
 
 // Create a user for the application
 db.createUser({
-  user: 'dvcuser',
-  pwd: 'dvcpassword',
-  roles: [
-    {
-      role: 'readWrite',
-      db: 'dvc'
-    }
-  ]
+    user: 'dvcuser',
+    pwd: 'dvcpassword',
+    roles: [
+        {
+            role: 'readWrite',
+            db: 'dvc'
+        }
+    ]
 });
 
 // Create initial collections (optional)

@@ -36,4 +36,21 @@ app.use("/api/user-plans", userPlanRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+// Verify email configuration on startup
+const { verifyTransporter } = require("./services/mailServiceEnhanced");
+
+app.listen(PORT, async () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+
+    // Verify email configuration
+    console.log('📧 Verifying email configuration...');
+    const emailReady = await verifyTransporter();
+
+    if (emailReady) {
+        console.log('✅ Email service is ready');
+    } else {
+        console.log('⚠️  Email service verification failed - check your .env configuration');
+        console.log('💡 Run "node testEmail.js" to test email configuration');
+    }
+});
