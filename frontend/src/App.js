@@ -33,7 +33,7 @@ function Layout() {
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/anurcards">
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
