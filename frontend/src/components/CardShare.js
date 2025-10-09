@@ -4,7 +4,7 @@ import { Share, Copy, Mail, MessageCircle, Send } from 'lucide-react';
 const CardShare = ({ cardData, isOpen, onClose }) => {
     const [copied, setCopied] = useState(false);
 
-    const cardURL = `${window.location.origin}/card/${cardData.id || 'preview'}`;
+    const cardURL = `${window.location.origin}/anurcards/card/${cardData.id || 'preview'}`;
 
     const copyToClipboard = async () => {
         try {
@@ -71,8 +71,8 @@ const CardShare = ({ cardData, isOpen, onClose }) => {
                             <button
                                 onClick={copyToClipboard}
                                 className={`px-3 py-2 rounded-md flex items-center gap-1 ${copied
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-blue-500 text-white hover:bg-blue-600'
                                     }`}
                             >
                                 <Copy size={16} />
