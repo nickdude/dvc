@@ -105,7 +105,7 @@ const CardDesignsTab = () => {
                 {designs.map((design) => (
                     <div key={design._id} className="border p-3 rounded shadow-sm">
                         <img
-                            src={`/assets/${design.image}`} // ✅ dynamic from backend
+                            src={`${process.env.PUBLIC_URL}/assets/${design.image}`} // ✅ dynamic from backend
                             alt={design.name}
                             className="w-full h-80 object-cover rounded"
                         />
