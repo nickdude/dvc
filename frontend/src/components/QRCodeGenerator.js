@@ -10,7 +10,7 @@ const QRCodeGenerator = ({ cardData, isOpen, onClose }) => {
         setLoading(true);
         try {
             // Create a shareable URL for the card
-            const cardURL = `${window.location.origin}anurcards/#/card/${cardData.id || 'preview'}`;
+            const cardURL = `${window.location.origin}/anurcards/#/card/${cardData.id || 'preview'}`;
 
             // Generate QR code
             const qrCodeDataURL = await QRCode.toDataURL(cardURL, {
