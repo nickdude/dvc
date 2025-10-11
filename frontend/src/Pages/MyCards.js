@@ -55,7 +55,7 @@ const MyCards = () => {
     };
 
     const handleViewCard = (cardId) => {
-        window.open(`/card/${cardId}`, '_blank');
+        window.open(`#/card/${cardId}`, '_blank');
     };
 
     if (loading) {
