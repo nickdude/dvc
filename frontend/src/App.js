@@ -22,7 +22,7 @@ function Layout() {
   return (
     <>
       <Navbar />
-      <main className="min-h-[80vh]">
+      <main className="min-h-screen">
         <Outlet /> {/* This is where the nested page will render */}
       </main>
       <Footer />

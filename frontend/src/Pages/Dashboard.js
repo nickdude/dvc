@@ -298,9 +298,9 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className='w-[100vw] min-h-screen flex bg-[background: #FCFDFD4D;]'>
+            <div className='w-full min-h-screen flex flex-col lg:flex-row bg-gray-50'>
                 <Asidebar />
-                <div className="w-[50vw] h-screen flex items-center justify-center">
+                <div className="w-full lg:w-1/2 min-h-screen flex items-center justify-center p-4">
                     {/* Mobile Preview Card */}
                     {id === "1" ? <PreviewCardOne
                         profileImage={profileImage || dummyProfile}
@@ -350,8 +350,8 @@ const Dashboard = () => {
 
                 </div>
 
-                <div className="w-[40vw] h-screen flex flex-col justify-start text-3xl rounded-lg font-inter text-semiLightBlack overflow-y-auto shadow-lg mt-10">
-                    <div className="m-4 h-fit flex space-x-4">
+                <div className="w-full lg:w-1/2 h-screen flex flex-col justify-start text-3xl rounded-lg font-inter text-semiLightBlack overflow-y-auto shadow-lg mt-4 lg:mt-10 px-4 lg:px-0">
+                    <div className="m-4 h-fit flex flex-wrap gap-2 sm:gap-4">
                         <WhiteButton
                             icon={edit}
                             text={saving ? "Saving..." : "Save"}
@@ -369,8 +369,8 @@ const Dashboard = () => {
                             onClick={() => setShowShare(true)}
                         />
                     </div>
-                    <div className="m-4 h-fit flex flex-col space-y-3">
-                        <h1 className="text-xl text-black font-semibold">Create Your Digital NFC Card</h1>
+                    <div className="m-2 sm:m-4 h-fit flex flex-col space-y-3">
+                        <h1 className="text-lg sm:text-xl text-black font-semibold">Create Your Digital NFC Card</h1>
                         <p className="text-xs text-semiDarkBlack font-normal">
                             This digital business card shares your main contact information only.
                         </p>
@@ -380,34 +380,33 @@ const Dashboard = () => {
                             placeholder="Shubham Pandey's Contact Card"
                             value={cardName}
                             onChange={(e) => setCardName(e.target.value)}
-                            className="w-[483px] text-sm  text-darkBlack rounded-lg p-3 border border-gray-300 outline-none"
+                            className="w-full max-w-lg text-sm text-darkBlack rounded-lg p-3 border border-gray-300 outline-none"
                         />
 
                         <p className="text-sm text-semiBlack font-semibold">Card Layout</p>
 
-                        <div className="w-fit h-fit flex items-center justify-center gap-12">
-                            {profileCardStyles.length > 0 && profileCardStyles.map((card) => (
+                        <div className="w-fit h-fit flex items-center justify-start gap-4 sm:gap-8 lg:gap-12 flex-wrap">{profileCardStyles.length > 0 && profileCardStyles.map((card) => (
+                            <div
+                                key={card.id}
+                                onClick={() => setSelectedId(card.id)}
+                                className="flex flex-col items-center justify-center space-y-2 cursor-pointer"
+                            >
                                 <div
-                                    key={card.id}
-                                    onClick={() => setSelectedId(card.id)}
-                                    className="flex flex-col items-center justify-center space-y-2 cursor-pointer"
+                                    className={`w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-offWhite rounded-lg flex items-center justify-center transition duration-300 ${selectedId === card.id
+                                        ? "border-[1px] border-gray-300 shadow-lg rounded-xl bg-blue-50"
+                                        : ""
+                                        }`}
                                 >
-                                    <div
-                                        className={`w-32 h-32 bg-offWhite rounded-lg flex items-center justify-center transition duration-300 ${selectedId === card.id
-                                            ? "border-[1px] border-gray-300 shadow-lg rounded-xl bg-blue-50"
-                                            : ""
-                                            }`}
-                                    >
-                                        {card.component}
-                                    </div>
-                                    <p
-                                        className={`text-xs font-medium transition ${selectedId === card.id ? "text-blue-600 font-semibold" : "text-gray-400"
-                                            }`}
-                                    >
-                                        {card.name}
-                                    </p>
+                                    {card.component}
                                 </div>
-                            ))}
+                                <p
+                                    className={`text-xs font-medium transition ${selectedId === card.id ? "text-blue-600 font-semibold" : "text-gray-400"
+                                        }`}
+                                >
+                                    {card.name}
+                                </p>
+                            </div>
+                        ))}
                         </div>
 
                         <div className="w-full flex h-fit mt-6">
@@ -577,12 +576,12 @@ const Dashboard = () => {
                             Choose a Font
                         </h2>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {fonts.map((font) => (
                                 <button
                                     key={font.name}
                                     onClick={() => setSelectedFont(font.name)}
-                                    className={`min-w-56 border text-sm rounded-lg py-3 px-4 text-center text-gray-600 transition 
+                                    className={`w-full border text-sm rounded-lg py-3 px-4 text-center text-gray-600 transition 
                                ${selectedFont === font.name
                                             ? "border-blue-500 bg-blue-50 text-blue-600"
                                             : "border-gray-300 hover:border-gray-400"
@@ -608,12 +607,12 @@ const Dashboard = () => {
                         </div>
 
                         {/* Options */}
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-2 sm:gap-4">
                             {options.map((opt) => (
                                 <button
                                     key={opt.id}
                                     onClick={() => setAlignment(opt.id)}
-                                    className={`w-36 border rounded-lg py-3 flex items-center justify-center transition 
+                                    className={`w-full border rounded-lg py-3 flex items-center justify-center transition 
               ${alignment === opt.id
                                             ? "border-blue-500 bg-blue-50 text-blue-600"
                                             : "border-gray-300 hover:border-gray-400"
@@ -656,7 +655,7 @@ const Dashboard = () => {
                         </div>
 
                         {/* Options */}
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             {screenOptions.map((opt) => (
                                 <div key={opt.id} className="flex flex-col items-center">
                                     <button
@@ -668,7 +667,7 @@ const Dashboard = () => {
                                             }`}
                                     >
                                         <div
-                                            className={`w-36 h-52 rounded-lg ${opt.preview}`}
+                                            className={`w-32 h-44 sm:w-36 sm:h-52 rounded-lg ${opt.preview}`}
                                         ></div>
 
                                     </button>

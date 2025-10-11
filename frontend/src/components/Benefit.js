@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 
 const Benefit = () => {
     return (
-        <div id="paper-vs-digital" className='w-100 flex items-center flex-col justify-center py-20'>
-            <h2 className='text-4xl font-semibold font-inter leading-10'>Benefits of Our Digital NFC Card</h2>
-            <p className='text-base font-normal leading-5 font-inter mt-2 text-lightGrey'>The smarter, modern alternative to traditional business cards.</p>
-            <div className='w-100 flex items-center justify-center gap-8 flex-wrap mt-8 px-4 mb-10'>
+        <div id="paper-vs-digital" className='w-full flex items-center flex-col justify-center py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8'>
+            <h2 className='text-2xl sm:text-3xl lg:text-4xl font-semibold font-inter leading-tight lg:leading-10 text-center max-w-4xl'>Benefits of Our Digital NFC Card</h2>
+            <p className='text-sm sm:text-base font-normal leading-5 font-inter mt-2 text-lightGrey text-center max-w-2xl'>The smarter, modern alternative to traditional business cards.</p>
+            <div className='w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 mt-6 sm:mt-8 mb-8 lg:mb-10'>
                 {/* <div className=' bg-darkGrey rounded-xl flex flex-col items-center  gap-4 cursor-pointer hover:shadow-custom p-4'>
                     <h3 className='text-xl font-semibold text-black text-center'>Paper Business Card</h3>
                     <div className='flex flex-col items-start gap-2'>
@@ -42,12 +42,12 @@ const Benefit = () => {
                     </div>
                 </div> */}
 
-                <div className="relative bg-darkGrey rounded-xl flex flex-col items-center gap-4 cursor-pointer hover:shadow-custom p-4">
-                    <h3 className="text-xl font-semibold text-black text-center">
+                <div className="relative bg-darkGrey rounded-xl flex flex-col items-center gap-4 cursor-pointer hover:shadow-custom p-4 w-full max-w-lg">
+                    <h3 className="text-lg sm:text-xl font-semibold text-black text-center">
                         Paper Business Card
                     </h3>
-                    <div className="flex flex-col items-start gap-2">
-                        <div className="w-[35vw] min-h-[395px] bg-white rounded-lg p-4 flex flex-col items-start gap-2">
+                    <div className="flex flex-col items-start gap-2 w-full">
+                        <div className="w-full min-h-[300px] sm:min-h-[350px] lg:min-h-[395px] bg-white rounded-lg p-4 flex flex-col items-start gap-2">
                             <div className="flex items-center gap-2">
                                 <img src={closeIcon} alt="card1" className="w-5 h-5 rounded-t-xl" />
                                 <h1 className="text-base font-medium text-lightGrey">
@@ -89,16 +89,15 @@ const Benefit = () => {
                     {/* Floating Image */}
                     <img
                         src={oldCard}
-                        alt="floating"
-                        className="absolute -bottom-8 -left-64 translate-x-1/2 translate-y-1/2 w-80 h-80"
+                        alt="traditional business card"
+                        className="hidden lg:block absolute -bottom-8 -left-32 xl:-left-64 translate-x-1/2 translate-y-1/2 w-60 h-60 xl:w-80 xl:h-80"
                     />
                 </div>
 
-
-                <div className='relative bg-lightBlue rounded-xl flex flex-col items-center justify-center gap-4 cursor-pointer hover:shadow-custom p-4'>
-                    <h3 className='text-xl font-semibold text-white text-center'>Our Digital NFC Card</h3>
-                    <div className='flex flex-col items-start gap-2'>
-                        <div className='w-[35vw] min-h-[395px] bg-white rounded-lg p-4 flex flex-col items-start gap-2'>
+                <div className='relative bg-lightBlue rounded-xl flex flex-col items-center justify-center gap-4 cursor-pointer hover:shadow-custom p-4 w-full max-w-lg'>
+                    <h3 className='text-lg sm:text-xl font-semibold text-white text-center'>Our Digital NFC Card</h3>
+                    <div className='flex flex-col items-start gap-2 w-full'>
+                        <div className='w-full min-h-[300px] sm:min-h-[350px] lg:min-h-[395px] bg-white rounded-lg p-4 flex flex-col items-start gap-2'>
                             <div className='flex items-center gap-2'>
                                 <img src={tick} alt='card1' className='w-5 h-5 rounded-t-xl' />
                                 <h1 className='text-base font-medium text-lightGrey'>Instant Sharing in one Tap</h1>
@@ -139,13 +138,15 @@ const Benefit = () => {
 
                     <img
                         src={newCard}
-                        alt="floating"
-                        className="absolute -bottom-8 left-40 translate-x-1/2 translate-y-1/2 w-80 h-80"
+                        alt="digital NFC card"
+                        className="hidden lg:block absolute -bottom-8 left-20 xl:left-40 translate-x-1/2 translate-y-1/2 w-60 h-60 xl:w-80 xl:h-80"
                     />
                 </div>
             </div>
 
-            <Link to="/register"><BlueButton label='Get Yours Now' /></Link>
+            <div className="mt-8">
+                <Link to="/register"><BlueButton label='Get Yours Now' /></Link>
+            </div>
         </div>
     )
 }

@@ -30,10 +30,10 @@ const CardViewer = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p>Loading card...</p>
+                    <p className="text-sm sm:text-base">Loading card...</p>
                 </div>
             </div>
         );
@@ -41,10 +41,10 @@ const CardViewer = () => {
 
     if (error) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">Card Not Found</h1>
-                    <p className="text-gray-600">{error}</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Card Not Found</h1>
+                    <p className="text-gray-600 text-sm sm:text-base">{error}</p>
                 </div>
             </div>
         );
@@ -52,10 +52,10 @@ const CardViewer = () => {
 
     if (!card) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">Invalid Card</h1>
-                    <p className="text-gray-600">This card does not exist or is not public.</p>
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Invalid Card</h1>
+                    <p className="text-gray-600 text-sm sm:text-base">This card does not exist or is not public.</p>
                 </div>
             </div>
         );
@@ -119,8 +119,8 @@ const CardViewer = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 py-8">
-            <div className="max-w-md mx-auto">
+        <div className="min-h-screen bg-gray-100 py-4 sm:py-8 px-4">
+            <div className="max-w-sm sm:max-w-md mx-auto">
                 {getTemplateComponent()}
             </div>
         </div>
