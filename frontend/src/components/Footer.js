@@ -1,4 +1,4 @@
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.jpeg';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
@@ -8,8 +8,8 @@ const Footer = () => {
                 <div className='flex flex-col lg:flex-row justify-between gap-12 lg:gap-24'>
                     {/* Left Section - Company Info */}
                     <div className='flex flex-col items-start gap-4 lg:max-w-md'>
-                        <img src={logo} alt='logo' className='h-6 sm:h-7 w-auto' />
-                        <p className='text-sm text-black font-normal font-inter tracking-[-0.15px]'>© 2025 anurtech pvt ltd.</p>
+                        <img src={logo} alt='logo' className='h-6 sm:h-14 w-auto' />
+                        <p className='text-sm text-black font-normal font-inter tracking-[-0.15px]'>© 2025 Instaviz pvt ltd.</p>
 
                         <div className='mt-4'>
                             <h1 className='text-black font-bold text-sm leading-5 mb-2'>Address</h1>
@@ -22,7 +22,7 @@ const Footer = () => {
 
                         <div className='mt-4'>
                             <h1 className='text-black font-bold text-sm leading-5 mb-2'>Contact</h1>
-                            <p className='text-black font-inter text-sm leading-5 underline'>hello@anurtech.com</p>
+                            <p className='text-black font-inter text-sm leading-5 underline'>hello@instaviz.com</p>
                         </div>
 
                         <div className="flex space-x-4 items-start text-xl sm:text-2xl text-black mt-4">

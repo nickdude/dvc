@@ -1,7 +1,7 @@
 // Navbar.jsx
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import logo from "../assets/logo.svg";
+import logo from "../assets/logo.jpeg";
 import BlueButton from "./buttons/BlueButton";
 import BlueTransparentButton from "./buttons/BlueTransparentButton";
 import { useAuth } from "../contexts/AuthContext";
@@ -55,7 +55,7 @@ const Navbar = () => {
             {/* Desktop Navbar */}
             <div className="hidden lg:flex h-24 items-center justify-center gap-14 px-4">
                 <div className="flex items-center gap-4">
-                    <img src={logo} className="h-7 w-54 cursor-pointer" alt="logo" onClick={() => navigate("/")} />
+                    <img src={logo} className="h-14 w-54 cursor-pointer" alt="logo" onClick={() => navigate("/")} />
                     <hr className="border-collapse h-7 w-[1px] bg-black" />
                     <p className="font-normal font-inter text-xs text-grey">
                         Your digital business
