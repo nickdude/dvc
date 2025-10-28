@@ -45,7 +45,7 @@ const RegisterPage = () => {
         try {
             const response = await axiosInstance.post("/auth/register", {
                 companyName: formData.companyName,
-                fullName: formData.fullName,
+                name: formData.fullName,
                 email: formData.email,
                 phone: formData.phone,
                 password: formData.password,
