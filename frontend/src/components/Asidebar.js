@@ -1,4 +1,4 @@
-import logo from '../assets/logo.svg'
+import logo from '../assets/logo.jpeg'
 import envelop from '../assets/envelop.svg'
 import star from '../assets/star.svg'
 import question from '../assets/question.svg'
@@ -27,7 +27,7 @@ const Asidebar = () => {
                 <img
                     src={logo}
                     alt="logo"
-                    className='h-7 w-54 m-4 cursor-pointer hover:opacity-80 transition-opacity'
+                    className='h-14 w-48 m-4 cursor-pointer hover:opacity-80 transition-opacity'
                     onClick={() => navigate('/')}
                 />
                 <div className='text-white ml-4 mt-14 flex'>
