@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import axiosInstance from '../api/axiosInstance';
 
 const AuthContext = createContext();
 
@@ -17,40 +18,62 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        checkAuthStatus();
-    }, []);
+        const init = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    setLoading(false);
+                    return;
+                }
 
-    const checkAuthStatus = () => {
-        try {
-            const token = localStorage.getItem('token');
-            if (token) {
+                // decode to check expiry
                 const decoded = jwtDecode(token);
                 const currentTime = Date.now() / 1000;
-
                 if (decoded.exp > currentTime) {
                     setIsAuthenticated(true);
-                    setUser(decoded);
+                    // fetch fresh user from server (includes subscription info)
+                    const fresh = await refreshUser();
+                    if (!fresh) setUser(decoded);
                 } else {
-                    // Token expired
                     localStorage.removeItem('token');
                     setIsAuthenticated(false);
                     setUser(null);
                 }
+            } catch (error) {
+                console.error('Token validation error:', error);
+                localStorage.removeItem('token');
+                setIsAuthenticated(false);
+                setUser(null);
+            } finally {
+                setLoading(false);
             }
-        } catch (error) {
-            console.error('Token validation error:', error);
-            localStorage.removeItem('token');
-            setIsAuthenticated(false);
-            setUser(null);
-        } finally {
-            setLoading(false);
-        }
+        };
+
+        init();
+    }, []);
+
+    const checkAuthStatus = () => {
+        // kept for compatibility; init() in useEffect performs full check
     };
 
     const login = (token, userData) => {
         localStorage.setItem('token', token);
         setIsAuthenticated(true);
         setUser(userData);
+    };
+
+    const refreshUser = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) return null;
+            const res = await axiosInstance.get('/auth/verify-token', { headers: { Authorization: `Bearer ${token}` } });
+            const freshUser = res?.data?.data?.user;
+            if (freshUser) setUser(freshUser);
+            return freshUser;
+        } catch (err) {
+            console.error('Failed to refresh user', err);
+            return null;
+        }
     };
 
     const logout = () => {
@@ -65,7 +88,8 @@ export const AuthProvider = ({ children }) => {
         loading,
         login,
         logout,
-        checkAuthStatus
+        checkAuthStatus,
+        refreshUser,
     };
 
     return (

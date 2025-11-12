@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import PlanCard from "../components/PlanCard";
+import useEqualHeight from "../hooks/useEqualHeight";
+import { useToast } from "../contexts/ToastContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const PlanPage = () => {
     const navigate = useNavigate();
@@ -9,6 +12,8 @@ const PlanPage = () => {
     const [userPlan, setUserPlan] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const { addToast } = useToast();
+    const { user, refreshUser } = useAuth();
 
     useEffect(() => {
         console.log("User's active plan updated:", userPlan);
@@ -50,20 +55,119 @@ const PlanPage = () => {
         fetchPlansAndUserPlan();
     }, []);
 
+    // equalize heights of plan cards after plans load
+    useEqualHeight('.equal-height-card', [plans, loading]);
+
     const handleBuyPlan = async (plan) => {
+        // New flow: create a razorpay order on the server, then open checkout (or mock verify when no key)
         try {
             const token = localStorage.getItem("token");
-            await axiosInstance.post(
-                "/user-plans",
+            if (!token) {
+                addToast('Please login to purchase a plan', { type: 'error' });
+                return;
+            }
+
+            setLoading(true);
+
+            const res = await axiosInstance.post(
+                "/subscription/order",
                 { planId: plan._id },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
+            const payload = res?.data?.data || {};
+            const order = payload.order;
+            const keyId = payload.keyId; // may be null in mock mode
 
-            setUserPlan(plan);
-            navigate("/smart-cards");
+            // helper to load razorpay script
+            const loadScript = (src) =>
+                new Promise((resolve) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = () => resolve(true);
+                    script.onerror = () => resolve(false);
+                    document.body.appendChild(script);
+                });
+
+            if (keyId) {
+                // Real checkout flow
+                const ok = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+                if (!ok) throw new Error('Failed to load Razorpay checkout');
+
+                const options = {
+                    key: keyId,
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: 'DVCards',
+                    description: plan.subtitle || plan.title,
+                    order_id: order.id,
+                    handler: async function (response) {
+                        try {
+                            // verify payment on server
+                            await axiosInstance.post(
+                                '/subscription/verify',
+                                {
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature,
+                                    planId: plan._id,
+                                },
+                                { headers: { Authorization: `Bearer ${token}` } }
+                            );
+
+                            // refresh current user so subscription info is updated across the app
+                            try {
+                                await refreshUser();
+                            } catch (e) {
+                                // non-fatal - still proceed
+                                console.warn('refreshUser failed after verify', e);
+                            }
+
+                            setUserPlan(plan);
+                            addToast('Plan purchased successfully', { type: 'success' });
+                            navigate('/smart-cards');
+                        } catch (err) {
+                            addToast(err.response?.data?.message || 'Payment verification failed', { type: 'error' });
+                        }
+                    },
+                    prefill: {
+                        name: (user && user.name) || '',
+                        email: (user && user.email) || '',
+                    },
+                    theme: { color: '#3399cc' },
+                };
+
+                const rzp = new window.Razorpay(options);
+                rzp.open();
+            } else {
+                // Mock flow: immediately verify with mock signature
+                await axiosInstance.post(
+                    '/subscription/verify',
+                    {
+                        razorpay_order_id: order.id,
+                        razorpay_payment_id: `pay_mock_${Date.now()}`,
+                        razorpay_signature: 'MOCK_SIGNATURE',
+                        planId: plan._id,
+                    },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                // refresh current user so subscription info is updated across the app
+                try {
+                    await refreshUser();
+                } catch (e) {
+                    console.warn('refreshUser failed after mock verify', e);
+                }
+
+                setUserPlan(plan);
+                addToast('Plan purchased successfully', { type: 'success' });
+                navigate('/smart-cards');
+            }
         } catch (err) {
-            alert(err.response?.data?.message || "Failed to purchase plan");
+            console.error(err);
+            addToast(err.response?.data?.message || err.message || 'Failed to purchase plan', { type: 'error' });
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -84,7 +188,7 @@ const PlanPage = () => {
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : (
-                <div className="flex items-center justify-center gap-6 mt-6 flex-wrap">
+                <div className="flex items-start justify-center gap-6 mt-6 flex-wrap">
                     {plans.map((plan) => (
                         <PlanCard
                             key={plan._id}
