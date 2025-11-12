@@ -14,7 +14,7 @@ const Footer = () => {
                         <div className='mt-4'>
                             <h1 className='text-black font-bold text-sm leading-5 mb-2'>Address</h1>
                             <p className='text-black font-inter text-sm leading-5'>
-                                5th Floor, Temple Tower,<br />
+                                7th Floor, Temple Tower,<br />
                                 672 Anna Salai, Nandanam,<br />
                                 Chennai, TN 600 035
                             </p>
@@ -22,7 +22,8 @@ const Footer = () => {
 
                         <div className='mt-4'>
                             <h1 className='text-black font-bold text-sm leading-5 mb-2'>Contact</h1>
-                            <p className='text-black font-inter text-sm leading-5 underline'>hello@instaviz.com</p>
+                            <p className='text-black font-inter text-sm leading-5 underline'>info@instaviz.me</p>
+                            <p className='text-black font-inter text-sm leading-5 underline'>support@instaviz.me</p>
                         </div>
 
                         <div className="flex space-x-4 items-start text-xl sm:text-2xl text-black mt-4">

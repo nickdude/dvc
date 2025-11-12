@@ -36,7 +36,7 @@ exports.register = async (req, res, next) => {
         });
         await user.save();
 
-        const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${rawToken}`;
+        const verifyUrl = `${process.env.CLIENT_URL}/#/verify-email?token=${rawToken}`;
         await sendMail(email, "Verify your email", `<p>Hi ${name}, <a href="${verifyUrl}">click to verify</a></p>`);
 
         return successResponse(res, "Registered. Check your email to verify.");
