@@ -1,4 +1,6 @@
 import React from "react";
+import { fetchImageAsBase64, makeVCard, saveVCard } from '../utils/vcard';
+import { useToast } from '../contexts/ToastContext';
 import dummyProfile from '../assets/profile-one.jpeg';
 import dummyCover from '../assets/cover-one.png';
 
@@ -13,6 +15,7 @@ const PreviewCardOne = ({
     phone = "+1 (555) 123-4567",
     email = "aisha.patel@example.com",
     address = "123 Main St, Anytown, USA",
+    website = '',
     buttonText = "Add To Contacts",
     selectedFont = "sans-serif",
     alignment = "left",
@@ -103,9 +106,43 @@ const PreviewCardOne = ({
         }
     };
 
+    const { addToast, removeToast } = useToast();
+
+    const handleSave = async () => {
+        const preparingId = addToast('Preparing contact...', { type: 'info', duration: 0 });
+        try {
+            let photo = null;
+            if (profileImage) {
+                const fetched = await fetchImageAsBase64(profileImage).catch(() => null);
+                if (fetched) photo = fetched;
+            }
+
+            const v = makeVCard({
+                name,
+                phone,
+                email,
+                address,
+                company,
+                jobTitle: jobRole,
+                website,
+                note: bio,
+                photoBase64: photo?.base64,
+                photoMime: photo?.mime,
+            });
+
+            await saveVCard(v, `${(name || 'contact').replace(/\s+/g, '_')}.vcf`);
+            removeToast(preparingId);
+            addToast('Contact prepared — check your share/download', { type: 'success' });
+        } catch (err) {
+            console.error('Failed to save contact', err);
+            removeToast(preparingId);
+            addToast('Failed to prepare contact', { type: 'error' });
+        }
+    };
+
     return (
         <div
-            className={`w-[320px] h-[560px] rounded-3xl p-3 shadow-lg flex flex-col items-center overflow-hidden overflow-y-auto no-scrollbar ${fullScreen ? "" : "border-[10px]"}`}
+            className={`${fullScreen ? 'w-full h-full rounded-3xl p-3 box-border' : 'w-[320px] h-[560px] rounded-3xl p-3'} shadow-lg flex flex-col items-center overflow-hidden overflow-y-auto no-scrollbar ${fullScreen ? '' : 'border-[10px]'} `}
             style={{
                 background: selected === "gradient"
                     ? `linear-gradient(to bottom, #ffffff, ${selectedColor?.cardBg || "#d9f1fe"})` // gray gradient with fallback
@@ -119,7 +156,7 @@ const PreviewCardOne = ({
             {renderProfileImage()}
 
             {/* Card Content */}
-            <div className="flex flex-col justify-center flex-1 p-4">
+            <div className={`flex flex-col justify-center flex-1 ${fullScreen ? 'p-4' : 'p-4'}`}>
                 <h2 className="text-lg font-bold">{name}</h2>
                 <p className="text-sm">{company}</p>
                 <p className="text-xs mt-2">

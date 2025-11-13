@@ -3,12 +3,14 @@ import envelop from '../assets/envelop.svg'
 import star from '../assets/star.svg'
 import question from '../assets/question.svg'
 import BlueTransparentButton from './buttons/BlueTransparentButton'
+import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const Asidebar = () => {
     const navigate = useNavigate();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { user } = useAuth();
 
     const handleLogout = () => {
         console.log("Logging out...");
@@ -31,10 +33,10 @@ const Asidebar = () => {
                     onClick={() => navigate('/')}
                 />
                 <div className='text-white ml-4 mt-14 flex'>
-                    <div className='font-normal flex items-center justify-center rounded-lg text-sm font-inter bg-lightBlue p-3 w-10'>S</div>
+                    <div className='font-normal flex items-center justify-center rounded-lg text-sm font-inter bg-lightBlue p-3 w-10 text-white'>{user?.name ? user.name[0].toUpperCase() : 'G'}</div>
                     <div className='ml-3 flex flex-col items-start justify-center'>
-                        <p className='font-semibold text-sm text-semiLightBlack'>Shubham</p>
-                        <p className='font-normal text-xs text-semiLightBlack'>link.v1ce.co/gzamoplr</p>
+                        <p className='font-semibold text-sm text-semiLightBlack'>{user?.name || 'Guest'}</p>
+                        <p className='font-normal text-xs text-semiLightBlack'>{user?.email || 'guest@example.com'}</p>
                     </div>
                 </div>
                 <div className='mt-10 flex flex-col items-start justify-center text-sm font-inter text-semiLightBlack'>
@@ -92,10 +94,10 @@ const Asidebar = () => {
                 <div className='lg:hidden w-full bg-white shadow-lg border-t'>
                     <div className='p-4 space-y-4'>
                         <div className='flex items-center mb-4'>
-                            <div className='font-normal flex items-center justify-center rounded-lg text-sm font-inter bg-lightBlue p-3 w-10 text-white'>S</div>
+                            <div className='font-normal flex items-center justify-center rounded-lg text-sm font-inter bg-lightBlue p-3 w-10 text-white'>{user?.name ? user.name[0].toUpperCase() : 'G'}</div>
                             <div className='ml-3 flex flex-col items-start justify-center'>
-                                <p className='font-semibold text-sm text-semiLightBlack'>Shubham</p>
-                                <p className='font-normal text-xs text-semiLightBlack'>link.v1ce.co/gzamoplr</p>
+                                <p className='font-semibold text-sm text-semiLightBlack'>{user?.name || 'Guest'}</p>
+                                <p className='font-normal text-xs text-semiLightBlack'>{user?.email || 'guest@example.com'}</p>
                             </div>
                         </div>
 

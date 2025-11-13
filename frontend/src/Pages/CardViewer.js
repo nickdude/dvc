@@ -9,6 +9,7 @@ const CardViewer = () => {
     const [card, setCard] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const fetchCard = async () => {
@@ -27,6 +28,17 @@ const CardViewer = () => {
             fetchCard();
         }
     }, [cardId]);
+
+    // track mobile viewport (tailwind 'sm' breakpoint is 640px)
+    useEffect(() => {
+        const mq = window.matchMedia('(max-width: 639px)');
+        const update = () => setIsMobile(mq.matches);
+        update();
+        mq.addEventListener ? mq.addEventListener('change', update) : mq.addListener(update);
+        return () => {
+            mq.removeEventListener ? mq.removeEventListener('change', update) : mq.removeListener(update);
+        };
+    }, []);
 
     if (loading) {
         return (
@@ -106,7 +118,8 @@ const CardViewer = () => {
             website: card.website,
             selectedFont: card.selectedFont || "Inter",
             alignment: card.alignment || "center",
-            fullScreen: card.fullScreen || false,
+            // force fullScreen on mobile so the preview fits the viewport
+            fullScreen: isMobile || card.fullScreen || false,
             autoDownload: card.autoDownload || false,
             enabled: card.enabled || false,
             floatingSave: card.floatingSave !== false,
@@ -119,8 +132,8 @@ const CardViewer = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 py-4 sm:py-8 px-4">
-            <div className="max-w-sm sm:max-w-md mx-auto">
+        <div className={`bg-gray-100 ${isMobile ? 'min-h-screen h-screen py-0 px-0' : 'min-h-screen py-4 sm:py-8 px-4'}`}>
+            <div className={`${isMobile ? 'w-full h-full' : 'max-w-sm sm:max-w-md mx-auto'}`}>
                 {getTemplateComponent()}
             </div>
         </div>

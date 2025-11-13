@@ -1,4 +1,6 @@
 import profileOne from '../assets/profile-one.jpeg';
+import { fetchImageAsBase64, makeVCard, saveVCard } from '../utils/vcard';
+import { useToast } from '../contexts/ToastContext';
 import dummyProfile from '../assets/profile-one.jpeg';
 import dummyCover from '../assets/cover-one.png';
 
@@ -22,6 +24,7 @@ const PreviewCardTwo = ({
     phone = "+1 (555) 123-4567",
     email = "aisha.patel@example.com",
     address = "123 Main St, Anytown, USA",
+    website = '',
     buttonText = "Add To Contacts",
     selectedFont = "sans-serif",
     alignment = "left",
@@ -39,6 +42,52 @@ const PreviewCardTwo = ({
     selectedProfileCardStyle = 1
 }
 ) => {
+
+    const SaveButton = ({ name, profileImage, phone, email, address, company, jobRole, website, bio, selectedColor }) => {
+        const { addToast, removeToast } = useToast();
+        return (
+            <button
+                onClick={async () => {
+                    const preparingId = addToast('Preparing contact...', { type: 'info', duration: 0 });
+                    try {
+                        let photo = null;
+                        if (profileImage) {
+                            const fetched = await fetchImageAsBase64(profileImage).catch(() => null);
+                            if (fetched) photo = fetched;
+                        }
+
+                        const v = makeVCard({
+                            name,
+                            phone,
+                            email,
+                            address,
+                            company,
+                            jobTitle: jobRole,
+                            website,
+                            note: bio,
+                            photoBase64: photo?.base64,
+                            photoMime: photo?.mime,
+                        });
+
+                        await saveVCard(v, `${(name || 'contact').replace(/\s+/g, '_')}.vcf`);
+                        removeToast(preparingId);
+                        addToast('Contact prepared — check your share/download', { type: 'success' });
+                    } catch (err) {
+                        console.error('Failed to save contact', err);
+                        removeToast(preparingId);
+                        addToast('Failed to prepare contact', { type: 'error' });
+                    }
+                }}
+                className="w-full text-white text-center py-3 mt-4 rounded-lg font-medium"
+                style={{
+                    backgroundColor: selectedColor?.buttonColor || "#2563eb",
+                    color: selectedColor?.buttonText || "#fff",
+                }}
+            >
+                Save Contact
+            </button>
+        );
+    };
 
     // Function to render profile image based on selected style
     const renderProfileImage = () => {
@@ -115,7 +164,7 @@ const PreviewCardTwo = ({
 
 
     return (
-        <div className={`w-80 h-[560px]  rounded-3xl shadow-lg overflow-hidden mx-auto  ${fullScreen ? "" : "border-[10px]"}`}
+        <div className={`${fullScreen ? 'w-full h-full rounded-3xl mx-0 p-3 box-border' : 'w-80 h-[560px] rounded-3xl mx-auto'} shadow-lg overflow-hidden ${fullScreen ? '' : 'border-[10px]'}`}
             style={{
                 fontFamily: selectedFont || "sans-serif",
                 textAlign: alignment || "center",
@@ -219,13 +268,7 @@ const PreviewCardTwo = ({
                 }
 
                 {/* Save Contact Button */}
-                <button className="w-full text-white text-center py-3 mt-4 rounded-lg font-medium"
-                    style={{
-                        backgroundColor: selectedColor?.buttonColor || "#2563eb",
-                        color: selectedColor?.buttonText || "#fff",
-                    }}>
-                    Save Contact
-                </button>
+                <SaveButton name={name} profileImage={profileImage} phone={phone} email={email} address={address} company={company} jobRole={jobRole} website={website} bio={bio} selectedColor={selectedColor} />
             </div >
         </div >
     );
