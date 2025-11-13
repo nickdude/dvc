@@ -19,7 +19,8 @@ const PreviewCardOne = ({
     buttonText = "Add To Contacts",
     selectedFont = "sans-serif",
     alignment = "left",
-    fullScreen = true,
+    fullScreen = false,
+    fullBackground = false,
     autoDownload = false,
     enabled = false,
     floatingSave = true,
@@ -142,7 +143,7 @@ const PreviewCardOne = ({
 
     return (
         <div
-            className={`${fullScreen ? 'w-full h-full rounded-3xl p-3 box-border' : 'w-[320px] h-[560px] rounded-3xl p-3'} shadow-lg flex flex-col items-center overflow-hidden overflow-y-auto no-scrollbar ${fullScreen ? '' : 'border-[10px]'} `}
+            className={`${fullScreen ? 'w-full h-full rounded-3xl p-3 box-border' : 'w-[320px] h-[560px] rounded-3xl p-3'} shadow-lg flex flex-col items-center overflow-hidden overflow-y-auto no-scrollbar ${fullBackground ? '' : 'border-[10px]'} `}
             style={{
                 background: selected === "gradient"
                     ? `linear-gradient(to bottom, #ffffff, ${selectedColor?.cardBg || "#d9f1fe"})` // gray gradient with fallback

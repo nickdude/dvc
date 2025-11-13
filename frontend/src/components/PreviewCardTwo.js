@@ -28,7 +28,8 @@ const PreviewCardTwo = ({
     buttonText = "Add To Contacts",
     selectedFont = "sans-serif",
     alignment = "left",
-    fullScreen = true,
+    fullScreen = false,
+    fullBackground = false,
     autoDownload = false,
     enabled = false,
     floatingSave = true,
@@ -164,7 +165,7 @@ const PreviewCardTwo = ({
 
 
     return (
-        <div className={`${fullScreen ? 'w-full h-full rounded-3xl mx-0 p-3 box-border' : 'w-80 h-[560px] rounded-3xl mx-auto'} shadow-lg overflow-hidden ${fullScreen ? '' : 'border-[10px]'}`}
+        <div className={`${fullScreen ? 'w-full h-full rounded-3xl mx-0 p-3 box-border' : 'w-80 h-[560px] rounded-3xl mx-auto'} shadow-lg overflow-hidden ${fullBackground ? '' : 'border-[10px]'}`}
             style={{
                 fontFamily: selectedFont || "sans-serif",
                 textAlign: alignment || "center",

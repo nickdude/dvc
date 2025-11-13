@@ -315,7 +315,8 @@ const Dashboard = () => {
                         address={formData.address}
                         selectedFont={selectedFont}
                         alignment={alignment}
-                        fullScreen={fullScreen}
+                        /* Only control the preview background/border while editing — do not change size */
+                        fullBackground={fullScreen}
                         autoDownload={autoDownload}
                         floatingSave={floatingSave}
                         enabled={enabled}
@@ -337,7 +338,7 @@ const Dashboard = () => {
                         address={formData.address}
                         selectedFont={selectedFont}
                         alignment={alignment}
-                        fullScreen={fullScreen}
+                        fullBackground={fullScreen}
                         autoDownload={autoDownload}
                         floatingSave={floatingSave}
                         enabled={enabled}

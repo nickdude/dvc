@@ -118,8 +118,10 @@ const CardViewer = () => {
             website: card.website,
             selectedFont: card.selectedFont || "Inter",
             alignment: card.alignment || "center",
-            // force fullScreen on mobile so the preview fits the viewport
-            fullScreen: isMobile || card.fullScreen || false,
+            // only force fullScreen on mobile so the preview fits the viewport there
+            fullScreen: isMobile,
+            // let saved card.fullScreen control background/border only
+            fullBackground: card.fullScreen || false,
             autoDownload: card.autoDownload || false,
             enabled: card.enabled || false,
             floatingSave: card.floatingSave !== false,
@@ -131,6 +133,7 @@ const CardViewer = () => {
         return usePreviewCardOne ? <PreviewCardOne {...cardProps} /> : <PreviewCardTwo {...cardProps} />;
     };
 
+    // Only use mobile viewport to render full-screen; saved card.fullScreen affects background only
     return (
         <div className={`bg-gray-100 ${isMobile ? 'min-h-screen h-screen py-0 px-0' : 'min-h-screen py-4 sm:py-8 px-4'}`}>
             <div className={`${isMobile ? 'w-full h-full' : 'max-w-sm sm:max-w-md mx-auto'}`}>
