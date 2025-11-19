@@ -24,7 +24,7 @@ const HeroSection = () => {
                 </p>
                 <div className='flex flex-col sm:flex-row gap-4 mt-8 lg:mt-12 justify-center lg:justify-start'>
                     <Link to="/register"><BlueButton label='Get Yours Now' /></Link>
-                    <Link to="/demo"><BlackButton label='Book a Demo' /></Link>
+                    <Link to="/contact"><BlackButton label='Book a Demo' /></Link>
                 </div>
                 <div className='flex flex-col sm:flex-row items-center justify-center lg:justify-start mt-8 lg:mt-14 gap-4'>
                     <div className="flex items-center justify-center py-4">
