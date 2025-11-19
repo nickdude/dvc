@@ -88,6 +88,18 @@ const Navbar = () => {
                     >
                         Paper Vs Digital
                     </p>
+                    <p
+                        className="font-medium text-sm text-lightGrey hover:text-blue-600 cursor-pointer transition-colors duration-200"
+                        onClick={() => { navigate('/about'); setIsMobileMenuOpen(false); }}
+                    >
+                        About Us
+                    </p>
+                    <p
+                        className="font-medium text-sm text-lightGrey hover:text-blue-600 cursor-pointer transition-colors duration-200"
+                        onClick={() => { navigate('/contact'); setIsMobileMenuOpen(false); }}
+                    >
+                        Contact us
+                    </p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -161,6 +173,18 @@ const Navbar = () => {
                                 onClick={() => scrollToSection('paper-vs-digital')}
                             >
                                 Paper Vs Digital
+                            </p>
+                            <p
+                                className="block font-medium text-sm text-lightGrey hover:text-blue-600 cursor-pointer transition-colors duration-200 py-2"
+                                onClick={() => { navigate('/about'); setIsMobileMenuOpen(false); }}
+                            >
+                                About Us
+                            </p>
+                            <p
+                                className="block font-medium text-sm text-lightGrey hover:text-blue-600 cursor-pointer transition-colors duration-200 py-2"
+                                onClick={() => { navigate('/contact'); setIsMobileMenuOpen(false); }}
+                            >
+                                Contact us
                             </p>
                         </div>
 

@@ -1,7 +1,28 @@
 import logo from '../assets/logo.jpeg';
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const scrollToSection = (id) => (e) => {
+        e.preventDefault()
+        const doScroll = () => {
+            const el = document.getElementById(id)
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            else window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+
+        if (location.pathname !== '/') {
+            navigate('/')
+            // wait for navigation to complete and DOM to render
+            setTimeout(doScroll, 80)
+        } else {
+            doScroll()
+        }
+    }
+
     return (
         <footer className='w-full bg-darkGrey px-4 sm:px-6 lg:px-8 py-12 lg:py-16'>
             <div className='max-w-7xl mx-auto'>
@@ -39,30 +60,27 @@ const Footer = () => {
                         <div>
                             <h1 className='text-black font-bold text-sm leading-5 mb-4'>Features</h1>
                             <div className='space-y-3'>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Features</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Website</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Business card</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Link in bio</p>
+                                <a href="/" onClick={scrollToSection('why-digital')} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Why digital card?</a>
+                                <a href="/" onClick={scrollToSection('process')} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Process</a>
+                                <a href="/" onClick={scrollToSection('paper-vs-digital')} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Paper Vs Digital</a>
                             </div>
                         </div>
 
                         <div>
                             <h1 className='text-black font-bold text-sm leading-5 mb-4'>Pricing</h1>
                             <div className='space-y-3'>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Pricing</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Pro</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Teams</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Enterprise</p>
+                                <a href="/" onClick={scrollToSection('plans')} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Pricing</a>
+                                <a href="/" onClick={scrollToSection('reviews')} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Reviews</a>
+                                <Link to="/register" onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50)} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Register</Link>
                             </div>
                         </div>
 
                         <div>
                             <h1 className='text-black font-bold text-sm leading-5 mb-4'>Company</h1>
                             <div className='space-y-3'>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Home</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>About Us</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Contact us</p>
-                                <p className='text-black font-inter text-sm leading-5 hover:text-blue-600 cursor-pointer transition-colors'>Affiliate program</p>
+                                <a href='/' onClick={scrollToSection('top')} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Home</a>
+                                <Link to="/about" onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50)} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>About Us</Link>
+                                <Link to="/contact" onClick={() => setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50)} className='text-black font-inter text-sm leading-5 hover:text-blue-600 transition-colors block'>Contact us</Link>
                             </div>
                         </div>
                     </div>

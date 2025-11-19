@@ -4,11 +4,14 @@ import HomePage from "./Pages/HomePage";
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import PlanPage from "./Pages/PlanPage";
 import SmartCardPage from "./Pages/SmartCardPage";
 import TemplatePage from "./Pages/TemplatePage";
+import ContactUs from "./Pages/ContactUs";
+import AboutUs from "./Pages/AboutUs";
 import Dashboard from "./Pages/Dashboard";
 import VerifyEmail from "./Pages/VerifyEmail";
 import ResetPassword from "./Pages/ResetPassword";
@@ -82,6 +85,7 @@ function App() {
     <AuthProvider>
       <ToastProvider>
         <Router>
+          <ScrollToTop />
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<HomePage />} />
@@ -105,6 +109,8 @@ function App() {
                   <MyCards />
                 </ProtectedRoute>
               } />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/about" element={<AboutUs />} />
             </Route>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/dashboard/:id" element={

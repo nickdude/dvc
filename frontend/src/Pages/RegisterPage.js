@@ -77,7 +77,7 @@ const RegisterPage = () => {
                     onSubmit={handleSubmit}
                     className="bg-white shadow-[0px_0px_8px_0px_#1D1D1F08] p-6 sm:p-8 lg:p-12 rounded-2xl space-y-6"
                 >
-                    <button
+                    {/* <button
                         type="button"
                         className="w-full flex items-center justify-center border border-gray-300 rounded-lg py-3 sm:py-4 hover:bg-gray-50 transition"
                     >
@@ -93,7 +93,7 @@ const RegisterPage = () => {
                         <div className="flex-grow border-t border-gray-300"></div>
                         <span className="mx-4 text-gray-400 text-sm">Or</span>
                         <div className="flex-grow border-t border-gray-300"></div>
-                    </div>
+                    </div> */}
 
                     <div className="w-full">
                         <label className="block text-xs leading-4 text-lightBlack font-medium mb-2">
