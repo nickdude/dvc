@@ -186,7 +186,7 @@ const LoginPage = () => {
 
                 <form onSubmit={handleSubmit} className="bg-white shadow-[0px_0px_8px_0px_#1D1D1F08] p-6 sm:p-8 lg:p-12 rounded-2xl space-y-6">
                     {/* Google Identity button will be rendered into this container when GSI loads */}
-                    <div id="gsi-button" className="w-full mb-2"></div>
+                    <div id="gsi-button" className="w-full mb-2 flex justify-center items-center"></div>
 
                     {/* Fallback/custom button when GSI is not available */}
                     {!googleLoaded && !googleLoadError && (
