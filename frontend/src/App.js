@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
+import CreateLinkPage from "./Pages/CreateLinkPage";
+import CardCreated from "./Pages/CardCreated";
 import PlanPage from "./Pages/PlanPage";
 import SmartCardPage from "./Pages/SmartCardPage";
 import TemplatePage from "./Pages/TemplatePage";
@@ -120,6 +122,16 @@ function App() {
             } />
             <Route path="/card/:cardId" element={<CardViewer />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/create-link" element={
+              <ProtectedRoute>
+                <CreateLinkPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/card-created" element={
+              <ProtectedRoute>
+                <CardCreated />
+              </ProtectedRoute>
+            } />
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />

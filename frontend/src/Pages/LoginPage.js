@@ -33,7 +33,7 @@ const LoginPage = () => {
                 const { token, user } = response?.data?.data || {}
                 login(token, user)
                 try { await refreshUser() } catch (e) { console.warn('refreshUser failed after Google login', e) }
-                const from = location.state?.from?.pathname || "/plans"
+                const from = location.state?.from?.pathname || "/create-link"
                 const hasSubscription = (() => { try { const sub = user?.subscription; if (!sub || !sub.endDate) return false; return new Date(sub.endDate).getTime() > Date.now() } catch (e) { return false } })()
                 if (user?.roles?.includes("superadmin")) navigate("/admin-dashboard")
                 else if (!hasSubscription && from === '/smart-cards') navigate('/plans', { replace: true })
@@ -145,7 +145,7 @@ const LoginPage = () => {
             const { token, user } = response?.data?.data || {}
             login(token, user)
             try { await refreshUser() } catch (e) { console.warn('refreshUser failed after login', e) }
-            const from = location.state?.from?.pathname || "/plans"
+            const from = location.state?.from?.pathname || "/create-link"
             const hasSubscription = (() => { try { const sub = user?.subscription; if (!sub || !sub.endDate) return false; return new Date(sub.endDate).getTime() > Date.now() } catch (e) { return false } })()
             if (user?.roles?.includes("superadmin")) navigate("/admin-dashboard")
             else if (!hasSubscription && from === '/smart-cards') navigate('/plans', { replace: true })

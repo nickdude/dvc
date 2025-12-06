@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useToast } from '../contexts/ToastContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'
 import { getMyCards, deleteCard } from '../services/cardService';
 import { Edit, Trash2, Share, QrCode, Eye } from 'lucide-react';
 import QRCodeGenerator from '../components/QRCodeGenerator';
@@ -29,16 +31,29 @@ const MyCards = () => {
         }
     };
 
+    const { addToast } = useToast();
+
     const handleDeleteCard = async (cardId) => {
         if (window.confirm('Are you sure you want to delete this card?')) {
             try {
                 await deleteCard(cardId);
                 setCards(cards.filter(card => card._id !== cardId));
             } catch (err) {
-                alert('Failed to delete card');
+                console.error('deleteCard error', err)
+                addToast('Failed to delete card', { type: 'error' })
             }
         }
     };
+
+    const { user } = useAuth()
+
+    const hasActiveSubscription = (u) => {
+        try {
+            const sub = u?.subscription
+            if (!sub || !sub.endDate) return false
+            return new Date(sub.endDate).getTime() > Date.now()
+        } catch (e) { return false }
+    }
 
     const handleShareCard = (card) => {
         setSelectedCard(card);
@@ -50,12 +65,24 @@ const MyCards = () => {
         setShowQRCode(true);
     };
 
-    const handleEditCard = (cardId) => {
-        navigate(`/dashboard/1?cardId=${cardId}`);
+    const handleEditCard = (card) => {
+        // If this card was created via external API and user has no subscription, send them to plans
+        const isExternal = !!card?.externalUrl
+        if (isExternal && !hasActiveSubscription(user)) {
+            navigate('/plans')
+            return
+        }
+
+        // allow editing if internal card or user has active subscription
+        navigate(`/dashboard/1?cardId=${card._id}`);
     };
 
-    const handleViewCard = (cardId) => {
-        window.open(`#/card/${cardId}`, '_blank');
+    const handleViewCard = (card) => {
+        if (card?.externalUrl) {
+            window.open(card.externalUrl, '_blank')
+        } else {
+            window.open(`#/card/${card._id}`, '_blank');
+        }
     };
 
     if (loading) {
@@ -78,10 +105,13 @@ const MyCards = () => {
                         <p className="text-gray-600 mt-2 text-sm sm:text-base">Manage and share your digital business cards</p>
                     </div>
                     <button
-                        onClick={() => navigate('/template')}
+                        onClick={() => {
+                            const dest = hasActiveSubscription(user) ? '/template' : '/plans'
+                            navigate(dest)
+                        }}
                         className="bg-blue-500 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-600 transition text-sm sm:text-base w-full sm:w-auto"
                     >
-                        Create New Card
+                        Create Customize Card
                     </button>
                 </div>
 
@@ -99,10 +129,13 @@ const MyCards = () => {
                         <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">No cards yet</h3>
                         <p className="text-gray-600 mb-6 text-sm sm:text-base max-w-md mx-auto">Create your first digital business card to get started</p>
                         <button
-                            onClick={() => navigate('/template')}
+                            onClick={() => {
+                                const dest = hasActiveSubscription(user) ? '/template' : '/plans'
+                                navigate(dest)
+                            }}
                             className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition text-sm sm:text-base"
                         >
-                            Create Your First Card
+                            Create Customize Card
                         </button>
                     </div>
                 ) : (
@@ -188,14 +221,14 @@ const MyCards = () => {
                                 {/* Enhanced Action Buttons */}
                                 <div className="flex gap-2 mb-3">
                                     <button
-                                        onClick={() => handleEditCard(card._id)}
+                                        onClick={() => handleEditCard(card)}
                                         className="flex-1 bg-blue-50 text-blue-600 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-blue-100 transition-all duration-200 flex items-center justify-center gap-1.5"
                                     >
                                         <Edit size={16} />
                                         Edit
                                     </button>
                                     <button
-                                        onClick={() => handleViewCard(card._id)}
+                                        onClick={() => handleViewCard(card)}
                                         className="flex-1 bg-green-50 text-green-600 py-2.5 px-3 rounded-xl text-sm font-semibold hover:bg-green-100 transition-all duration-200 flex items-center justify-center gap-1.5"
                                     >
                                         <Eye size={16} />
@@ -252,11 +285,7 @@ const MyCards = () => {
                         }}
                     />
                     <CardShare
-                        cardData={{
-                            id: selectedCard._id,
-                            name: selectedCard.name,
-                            ...selectedCard
-                        }}
+                        {...(selectedCard?.externalUrl ? { cardUrl: selectedCard.externalUrl } : { cardData: { id: selectedCard._id, name: selectedCard.name, ...selectedCard } })}
                         isOpen={showShare}
                         onClose={() => {
                             setShowShare(false);

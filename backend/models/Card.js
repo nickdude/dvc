@@ -47,6 +47,7 @@ const cardSchema = new mongoose.Schema({
     templateId: { type: String }, // which dashboard template was used (1 or 2)
     isPublic: { type: Boolean, default: true },
     slug: { type: String }, // optional friendly link
+    externalUrl: { type: String }, // external public URL (e.g., instaviz link)
 }, { timestamps: true });
 
 module.exports = mongoose.model("Card", cardSchema);

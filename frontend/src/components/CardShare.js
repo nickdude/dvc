@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Share, Copy, Mail, MessageCircle, Send } from 'lucide-react';
 
-const CardShare = ({ cardData, isOpen, onClose }) => {
+const CardShare = ({ cardData, isOpen, onClose, cardUrl: externalCardUrl }) => {
     const [copied, setCopied] = useState(false);
 
-    const cardURL = `${window.location.origin}/#/card/${cardData.id || 'preview'}`;
+    // Prefer an explicit externalCardUrl when provided (created link from external API).
+    // Fallback to constructing a local card URL from cardData.id when available.
+    const cardURL = externalCardUrl || `${window.location.origin}/#/card/${cardData?.id || 'preview'}`;
 
     const copyToClipboard = async () => {
         try {
@@ -17,7 +19,7 @@ const CardShare = ({ cardData, isOpen, onClose }) => {
     };
 
     const shareVia = (platform) => {
-        const shareText = `Check out my digital business card: ${cardData.name || 'Digital Card'}`;
+        const shareText = `Check out my digital business card: ${cardData?.name || 'Digital Card'}`;
 
         switch (platform) {
             case 'email':

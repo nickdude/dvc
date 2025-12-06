@@ -5,7 +5,15 @@ const mongoose = require("mongoose");
 // create card (self or team)
 exports.createCard = async (req, res, next) => {
     try {
-        const { type = "individual", user: userId, name, jobTitle, company, phone, email, website, address, profileImage, coverImage, socialLinks, isPublic } = req.body;
+        // Debug: log incoming payload keys for troubleshooting
+        try {
+            console.log('[cardController.createCard] user:', req.user && req.user._id ? req.user._id.toString() : req.user);
+            console.log('[cardController.createCard] body keys:', Object.keys(req.body || {}));
+        } catch (logErr) {
+            console.warn('[cardController.createCard] failed to log request body', logErr);
+        }
+
+        const { type = "individual", user: userId, name, jobTitle, company, phone, email, website, address, profileImage, coverImage, socialLinks, isPublic, externalUrl } = req.body;
 
         if (!name) return errorResponse(res, "Name is required", 400);
 
@@ -30,7 +38,8 @@ exports.createCard = async (req, res, next) => {
             profileImage,
             coverImage,
             socialLinks,
-            isPublic: isPublic !== undefined ? isPublic : true
+            isPublic: isPublic !== undefined ? isPublic : true,
+            externalUrl
         });
 
         return successResponse(res, "Card created", card, 201);
@@ -63,6 +72,15 @@ exports.getCardById = async (req, res, next) => {
 // update card (creator or represented user)
 exports.updateCard = async (req, res, next) => {
     try {
+        // Debug: log update attempts
+        try {
+            console.log('[cardController.updateCard] update attempt for cardId:', req.params.id);
+            console.log('[cardController.updateCard] auth user:', req.user && req.user._id ? req.user._id.toString() : req.user);
+            console.log('[cardController.updateCard] body keys:', Object.keys(req.body || {}));
+        } catch (logErr) {
+            console.warn('[cardController.updateCard] failed to log update request', logErr);
+        }
+
         const card = await Card.findById(req.params.id);
         if (!card) return errorResponse(res, "Card not found", 404);
 

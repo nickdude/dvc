@@ -15,6 +15,7 @@ import ProfileCardCircle from "../components/ProfileCardCircle"
 import ProfileCardWithCover from "../components/ProfileCardWithCover"
 import QRCodeGenerator from "../components/QRCodeGenerator"
 import CardShare from "../components/CardShare"
+import { useToast } from '../contexts/ToastContext'
 import { saveCard, updateCard, getCardById } from "../services/cardService"
 import { fileToBase64 } from "../utils/imageUtils"
 
@@ -137,6 +138,8 @@ const Dashboard = () => {
 
     const [selectedId, setSelectedId] = useState(profileCardStyles[0].id);
 
+    const { addToast } = useToast()
+
     const handleImageUpload = async (e, type) => {
         const file = e.target.files[0];
         if (file) {
@@ -158,7 +161,7 @@ const Dashboard = () => {
                 }
             } catch (error) {
                 console.error('Error processing image:', error);
-                alert('Error processing image. Please try a smaller file.');
+                addToast('Error processing image. Please try a smaller file.', { type: 'error' })
 
                 // Reset loading state
                 if (type === "profile") {
@@ -190,6 +193,7 @@ const Dashboard = () => {
         setSaving(true);
         try {
             console.log('Saving card with selectedColor:', selectedColor); // Debug log
+            console.log('handleSaveCard payload will be:', { cardId, selectedColor, formData, profileImage, coverImage });
             const cardData = {
                 name: cardName,
                 jobTitle: formData.jobRole,
@@ -232,10 +236,48 @@ const Dashboard = () => {
                 setCardId(response.data._id);
             }
 
-            alert('Card saved successfully!');
+            // After saving, re-fetch the card from backend to ensure preview/QR/etc use the persisted values
+            try {
+                const idToFetch = (cardId) ? cardId : response.data._id
+                const fresh = await getCardById(idToFetch)
+                const savedCard = fresh?.data || fresh
+                if (savedCard) {
+                    // apply saved card values into local state so preview and QR reflect saved version
+                    setCardId(savedCard._id)
+                    setCardName(savedCard.name || cardName)
+                    setFormData((prev) => ({
+                        ...prev,
+                        name: savedCard.name || prev.name,
+                        company: savedCard.company || prev.company,
+                        jobRole: savedCard.jobTitle || prev.jobRole,
+                        industry: savedCard.industry || prev.industry,
+                        bio: savedCard.bio || prev.bio,
+                        phone: savedCard.phone || prev.phone,
+                        email: savedCard.email || prev.email,
+                        address: savedCard.address || prev.address,
+                        website: savedCard.website || prev.website,
+                    }))
+
+                    if (savedCard.profileImage) setProfileImage(savedCard.profileImage)
+                    if (savedCard.coverImage) setCoverImage(savedCard.coverImage)
+                    if (savedCard.selectedColor) setSelectedColor(savedCard.selectedColor)
+                    setSelectedFont(savedCard.selectedFont || selectedFont)
+                    setAlignment(savedCard.alignment || alignment)
+                    setSelectedId(savedCard.selectedProfileCardStyle || selectedId)
+                    setFloatingSave(savedCard.floatingSave !== undefined ? savedCard.floatingSave : floatingSave)
+                    setFullScreen(savedCard.fullScreen || fullScreen)
+                    setAutoDownload(savedCard.autoDownload || autoDownload)
+                    setEnabled(savedCard.enabled || enabled)
+                }
+            } catch (reFetchErr) {
+                console.warn('Failed to re-fetch saved card', reFetchErr)
+            }
+
+            addToast('Card saved successfully!', { type: 'success' })
         } catch (error) {
             console.error('Error saving card:', error);
-            alert('Failed to save card. Please try again.');
+            const serverMessage = error?.response?.data?.message || error?.message || 'Failed to save card.';
+            addToast(`Failed to save card: ${serverMessage}`, { type: 'error' })
         } finally {
             setSaving(false);
         }
