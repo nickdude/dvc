@@ -75,7 +75,7 @@ function Layout() {
     <>
       <Navbar />
       <main className="min-h-screen">
-        <Outlet /> {/* This is where the nested page will render */}
+        <Outlet />
       </main>
       <Footer />
     </>
